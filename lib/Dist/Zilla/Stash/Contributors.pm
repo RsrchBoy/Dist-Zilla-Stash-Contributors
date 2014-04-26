@@ -3,23 +3,40 @@ package Dist::Zilla::Stash::Contributors;
 
 use strict;
 use warnings;
+use autobox::Core;
 
 use Moose;
-use MooseX::MarkAsMethods -autoclean => 1;
+use namespace::autoclean;
 use MooseX::AttributeShortcuts 0.023;
+
+use aliased 'Dist::Zilla::Stash::Contributors::Contributor';
 
 with 'Dist::Zilla::Role::Store';
 
 has contributors => (
-    traits => [ 'Hash' ],
-    isa => 'HashRef[Dist::Zilla::Stash::Contributors::Contributor]',
-    is => 'ro',
-    default => sub { {} },
-    handles => {
+    traits    => [ 'Hash' ],
+    isa       => 'HashRef[Dist::Zilla::Stash::Contributors::Contributor]',
+    is        => 'lazy',
+    predicate => -1,
+    clearer   => -1,
+    handles   => {
         _all_contributors => 'values',
-        nbr_contributors => 'count',
+        nbr_contributors  => 'count',
+    },
+    builder => sub {
+        my $self = shift @_;
+
+        ### find all our contributors-providing plugins...
+        #my @sources = $self->zilla->plugins_with('-ContributorSource');
+        my %contributors =
+            map { $_->email => $_ }
+            map { $_->contributors }
+            $self->zilla->plugins_with('-ContributorSource')->flatten
+            ;
+        return \%contributors;
     },
 );
+
 
 =method all_contributors()
 
