@@ -9,6 +9,8 @@ use MooseX::MarkAsMethods -autoclean => 1;
 
 use Dist::Zilla::Stash::Contributors::Contributor;
 
+with 'Dist::Zilla::Role::Stash';
+
 has contributors => (
     traits => [ 'Hash' ],
     isa => 'HashRef[Dist::Zilla::Stash::Contributors::Contributor]',
