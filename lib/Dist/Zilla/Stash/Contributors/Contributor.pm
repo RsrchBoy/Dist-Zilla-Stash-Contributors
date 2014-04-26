@@ -37,7 +37,8 @@ Returns the email address of the contributor.
 
 has email => (
     is => 'ro',
-    required => 0,
+    isa => 'Str',
+    required => 1,
 );
 
 =method stringify()
