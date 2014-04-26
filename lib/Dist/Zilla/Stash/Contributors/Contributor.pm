@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Moose;
+use MooseX::MarkAsMethods -autoclean => 1;
 
 use overload '""' => \&stringify;
 
