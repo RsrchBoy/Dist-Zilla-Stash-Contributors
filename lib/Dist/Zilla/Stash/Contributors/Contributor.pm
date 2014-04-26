@@ -55,6 +55,15 @@ as a string.
 
 sub stringify { sprintf '%s <%s>', $_[0]->name, $_[0]->email }
 
+=method equivalent_to($other_contrib)
+
+Given another Contributor object, we determine if we're equivalent by checking
+to see if we stringify to the same value.
+
+=cut
+
+sub equivalent_to { shift->stringify eq shift->stringify }
+
 __PACKAGE__->meta->make_immutable;
 1;
 
