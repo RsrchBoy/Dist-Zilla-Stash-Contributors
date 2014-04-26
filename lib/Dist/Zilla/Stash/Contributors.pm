@@ -22,6 +22,8 @@ has contributors => (
     handles   => {
         _all_contributors => 'values',
         nbr_contributors  => 'count',
+        _has_contributor  => 'exists',
+        _set_contributor  => 'set',
     },
     builder => sub {
         my $self = shift @_;
@@ -72,11 +74,10 @@ sub add_contributors {
         my $email;
         $email = $1 if $name =~ s/\s*<(.*?)>\s*//;
 
-        my $object = Dist::Zilla::Stash::Contributors::Contributor->new( 
-            name => $name, email => $email 
-        );
+        my $object = Contributor->new(name => $name, email => $email);
 
-        $self->contributors->{ $object->stringify } ||= $object;
+        # last in wins!
+        $self->_set_contributor($email => $object);
     }
 
 }
