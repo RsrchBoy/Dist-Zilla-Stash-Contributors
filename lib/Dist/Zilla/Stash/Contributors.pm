@@ -8,21 +8,7 @@ use Moose;
 use MooseX::MarkAsMethods -autoclean => 1;
 use MooseX::AttributeShortcuts 0.023;
 
-with 'Dist::Zilla::Role::Stash';
-
-has _zilla => (
-    is              => 'ro',
-    weaken          => 1,
-    isa_instance_of => 'Dist::Zilla::Builder',
-);
-
-before register_component => sub {
-    my ($class, $name, $arg, $section) = @_;
-
-    # stash our 'zilla!
-    $arg->{_zilla} ||= $section->sequence->assembler->zilla;
-    return;
-};
+with 'Dist::Zilla::Role::Store';
 
 has contributors => (
     traits => [ 'Hash' ],
