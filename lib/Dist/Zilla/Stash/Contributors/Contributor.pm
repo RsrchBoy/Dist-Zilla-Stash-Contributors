@@ -7,7 +7,10 @@ use warnings;
 use Moose;
 use MooseX::MarkAsMethods -autoclean => 1;
 
-use overload '""' => \&stringify;
+use overload
+    '""' => \&stringify,
+    '==' => sub { shift->equivalent_to(@_) },
+    ;
 
 =method new( name => $name, email => $address )
 
